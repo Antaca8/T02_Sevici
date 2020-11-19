@@ -11,6 +11,5 @@ def test_lee_estaciones():
     print(mostrar)
     
 if __name__ == '__main__':
-    ESTACIONES = lee_estaciones("../data/estaciones.csv")
     test_lee_estaciones()
     
