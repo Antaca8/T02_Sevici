@@ -5,7 +5,10 @@ Created on 4 nov. 2020
 @author: anton
 '''
 import csv
+from coordenadas import *
+from collections import namedtuple
 
+Estacion = namedtuple('Estacion', 'name slots empty_slots free_bikes coordenada')
 def lee_estaciones (fichero):
     estaciones = []
     with open (fichero, encoding = 'utf-8') as f:
@@ -17,7 +20,8 @@ def lee_estaciones (fichero):
             free_bikes = int(free_bikes)
             latitude = float(latitude)
             longitude = float(longitude)
-            estaciones.append((name, slots, empty_slots, free_bikes, latitude, longitude))
+            tupla_coord = Coordenada(latitude, longitude)
+            estaciones.append(Estacion(name, slots, empty_slots, free_bikes, tupla_coord))
     return estaciones
 
 def lee_estaciones2 (fichero):
@@ -32,6 +36,22 @@ def lee_estaciones2 (fichero):
             free_bikes = int(registro['free_bikes'])
             latitude = float(registro['latitude'])
             longitude = float(registro['longitude'])
-            tupla = (name, slots, empty_slots, free_bikes, latitude, longitude)
+            tupla_coord = Coordenada(latitude, longitude)
+            tupla = Estacion(name, slots, empty_slots, free_bikes, tupla_coord)
             estaciones.append(tupla)
     return estaciones
+
+def estaciones_bicis_libres(estaciones, k=5):
+    lista_res =[]
+    for t_estacion in estaciones:
+        if t_estacion.free_bikes >= k:
+            lista_res.append((t_estacion.free_bikes, t_estacion.name))
+    
+    lista_res = sorted(lista_res)      
+    return lista_res
+
+def ubicacion_estaciones(estaciones):
+    lista = []
+    for name, _, _, _, coordenadas in estaciones:
+        lista.append(name, coordenadas)
+    return lista
